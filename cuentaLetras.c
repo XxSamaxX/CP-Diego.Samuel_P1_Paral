@@ -35,7 +35,8 @@ int main(int argc, char *argv[]){
     char *cadena;
     char L;
 
-    struct data{int n; char L;}data;
+    int num;
+    char letra;
 
     // Obtenemos el numero de procesos, el rango del proceso y el nombre del procesador
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
@@ -46,14 +47,16 @@ int main(int argc, char *argv[]){
     if(rank == 0) {
         n = atoi(argv[1]);
         L = *argv[2];
-        data.n = n;
-        data.L = L;
+        num = n;
+        letra = L;
         for (i = 1; i < numprocs; i++)
-            MPI_Send(&data, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&num, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&letra, 1, MPI_CHAR, i, 0, MPI_COMM_WORLD);
     }else{
-        MPI_Recv(&data, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        n = data.n;
-        L = data.L;
+        MPI_Recv(&num, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&letra, 1, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        n = num;
+        L = letra;
     }
 
 
