@@ -43,23 +43,20 @@ int main(int argc, char *argv[]){
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Get_processor_name(processor_name, &namelen);
 
-    // Para el proceso 0
+    // Para las letras
     if(rank == 0) {
-        n = atoi(argv[1]);
         L = *argv[2];
-        num = n;
         letra = L;
         for (i = 1; i < numprocs; i++)
-            //MPI_Send(&num, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send(&letra, 1, MPI_CHAR, i, 0, MPI_COMM_WORLD);
     }else{
-        //MPI_Recv(&num, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(&letra, 1, MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        //n = num;
         L = letra;
     }
-
+    //Para el tamaño de la cadena
     if(rank == 0){
+        n = atoi(argv[1]);
+        num = n;
         for (i = 1; i < numprocs; i++)
             MPI_Send(&num, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
     }
